@@ -2,4 +2,4 @@ server:
   port: 4000
 
 loader:
-  inserts: 10
+  inserts: 10000

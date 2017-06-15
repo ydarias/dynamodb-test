@@ -20,11 +20,11 @@ public class MeteringTools {
 
     public MeteringTools() {
         reporter = ConsoleReporter.forRegistry(metrics)
-                .convertRatesTo(TimeUnit.MILLISECONDS)
+                .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
 
-        reporter.start(1, TimeUnit.SECONDS);
+        reporter.start(60, TimeUnit.SECONDS);
     }
 
     public Timer createTimer(String name) {
@@ -39,6 +39,10 @@ public class MeteringTools {
             return timers.get(name);
 
         return createTimer(name);
+    }
+
+    public void report() {
+        reporter.report();
     }
 
 }

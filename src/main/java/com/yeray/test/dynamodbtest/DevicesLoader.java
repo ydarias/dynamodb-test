@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
 @Component
@@ -30,18 +32,28 @@ public class DevicesLoader implements InitializingBean {
     }
 
     private void launchInserts() {
-        IntStream.range(0, inserts)
-                .forEach(i -> insertRandomDevice());
+        try {
+            new ForkJoinPool(10).submit(() ->
+                    IntStream.range(0, inserts)
+                            .parallel()
+                            .forEach(i -> insertRandomDevice())
+            ).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        meteringTools.report();
     }
 
     private void insertRandomDevice() {
+        Device device = new Device();
+        device.setDeviceId(RandomTools.macAddress());
+        device.setStatus(RandomTools.deviceStatus());
+
         final Timer.Context context = meteringTools.getTimer("inserts").time();
-
         try {
-            Device device = new Device();
-            device.setDeviceId(RandomTools.macAddress());
-            device.setStatus(RandomTools.deviceStatus());
-
             repository.storeDevice(device);
         } finally {
             context.stop();
