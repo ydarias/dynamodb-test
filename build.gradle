@@ -26,6 +26,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	compile('com.amazonaws:aws-java-sdk-dynamodb:1.11.147')
 	compile('com.google.code.gson:gson:2.8.1')
+	compile('com.codahale.metrics:metrics-core:3.0.2')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

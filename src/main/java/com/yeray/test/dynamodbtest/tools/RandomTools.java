@@ -1,4 +1,4 @@
-package com.yeray.test.dynamodbtest;
+package com.yeray.test.dynamodbtest.tools;
 
 import com.yeray.test.dynamodbtest.model.Device;
 
