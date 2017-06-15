@@ -20,6 +20,9 @@ public class DevicesLoader implements InitializingBean {
     @Value("${loader.inserts}")
     private int inserts;
 
+    @Value("${loader.threads}")
+    private int threads;
+
     @Autowired
     private DynamoRepository repository;
 
@@ -33,7 +36,7 @@ public class DevicesLoader implements InitializingBean {
 
     private void launchInserts() {
         try {
-            new ForkJoinPool(10).submit(() ->
+            new ForkJoinPool(threads).submit(() ->
                     IntStream.range(0, inserts)
                             .parallel()
                             .forEach(i -> insertRandomDevice())
