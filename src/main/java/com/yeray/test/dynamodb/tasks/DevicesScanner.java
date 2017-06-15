@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
-public class DevicesScanner {
+public class DevicesScanner implements Task {
 
     private DynamoRepository repository;
 
@@ -19,10 +19,10 @@ public class DevicesScanner {
         this.meteringTools = meteringTools;
     }
 
-    public void launchScans(int inserts, int threads) {
+    public void launch(int scans, int threads) {
         try {
             new ForkJoinPool(threads).submit(() ->
-                    IntStream.range(0, inserts)
+                    IntStream.range(0, scans)
                             .parallel()
                             .forEach(i -> scanRandomDevice())
             ).get();

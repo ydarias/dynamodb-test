@@ -4,9 +4,25 @@ import com.yeray.test.dynamodb.repository.DynamoRepository;
 import com.yeray.test.dynamodb.tasks.DevicesLoader;
 import com.yeray.test.dynamodb.tasks.DevicesQuerier;
 import com.yeray.test.dynamodb.tasks.DevicesScanner;
+import com.yeray.test.dynamodb.tasks.Task;
 import com.yeray.test.dynamodb.tools.MeteringTools;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Launcher {
+
+    private static DynamoRepository repository = new DynamoRepository();
+
+    private static MeteringTools meteringTools = new MeteringTools();
+
+    private static final Map<String, Task> tasks = new HashMap<>();
+
+    static {
+        tasks.put("insert", new DevicesLoader(repository, meteringTools));
+        tasks.put("scan", new DevicesScanner(repository, meteringTools));
+        tasks.put("query", new DevicesQuerier(repository, meteringTools));
+    }
 
     public static void main(String ... args) {
         String operation;
@@ -24,21 +40,7 @@ public class Launcher {
             return;
         }
 
-        DynamoRepository repository = new DynamoRepository();
-        MeteringTools meteringTools = new MeteringTools();
-
-        if ("insert".equals(operation)) {
-            DevicesLoader loader = new DevicesLoader(repository, meteringTools);
-            loader.launchInserts(operationsNumber, threads);
-        }
-        if ("scan".equals(operation)) {
-            DevicesScanner scanner = new DevicesScanner(repository, meteringTools);
-            scanner.launchScans(operationsNumber, threads);
-        }
-        if ("query".equals(operation)) {
-            DevicesQuerier querier = new DevicesQuerier(repository, meteringTools);
-            querier.launchQueries(operationsNumber, threads);
-        }
+        tasks.get(operation).launch(operationsNumber, threads);
     }
 
 }

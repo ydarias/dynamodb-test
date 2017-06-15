@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
-public class DevicesQuerier {
+public class DevicesQuerier implements Task {
 
     private DynamoRepository repository;
 
@@ -19,10 +19,10 @@ public class DevicesQuerier {
         this.meteringTools = meteringTools;
     }
 
-    public void launchQueries(int inserts, int threads) {
+    public void launch(int queries, int threads) {
         try {
             new ForkJoinPool(threads).submit(() ->
-                    IntStream.range(0, inserts)
+                    IntStream.range(0, queries)
                             .parallel()
                             .forEach(i -> queryRandomDevice())
             ).get();
