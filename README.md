@@ -1,5 +1,12 @@
 ## DynamoDB tests
 
+DynamoDB es una base de datos NoSQL desarrollada por Amazon y que se ofrece como servicio dentro de Amazon Web Services (AWS).
+
+## Ventajas
+
+* No requiere mantenimiento porque se delega integramente en Amazon AWS.
+* Permite opciones de autoescalado.
+
 ## Limitaciones y contras
 
 * No se trata de una base de datos relacional por lo que no existe la operación de __join__ entre tablas.
@@ -15,6 +22,16 @@
   * 25 items por batch de escritura.
 
 ## Tests sintéticos
+
+Para tener una idea aproximada del comportamiento (en escritura y lectura) que tendrá DynamoDB en "producción", se ha realizado una aplicación que lanza un batch de operaciones sobre una instancia de DynamoDB y se han obtenido una serie de medidas aproximadas.
+
+![Test de carga sobre DynamoDB](doc/images/test-diagram.jpg)
+
+__Hay que tener en cuenta que estás medidas incluyen la latencia de la red y no sólo el tiempo de procesamiento de DynamoDB__.
+
+### Disclaimer
+
+Estos tests se han realizado para tener una idea aproximada del comportamiento de DynamoDB, así como comprobar los posibles inconvenientes de su uso. __En ningún caso se debe tomar como un Benchmark válido__.
 
 ### 20 write units
 

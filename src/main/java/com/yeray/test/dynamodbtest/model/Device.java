@@ -40,4 +40,11 @@ public class Device {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "Device{" +
+                "deviceId='" + deviceId + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }
