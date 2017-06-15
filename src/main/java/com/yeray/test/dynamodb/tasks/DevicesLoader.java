@@ -31,7 +31,7 @@ public class DevicesLoader implements Task {
         try {
             new ForkJoinPool(threads).submit(() ->
                     devices.parallelStream()
-                        .forEach(this::insertRandomDevice)
+                            .forEach(this::insertRandomDevice)
             ).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

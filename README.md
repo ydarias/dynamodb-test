@@ -205,6 +205,23 @@ query
 ### 5 read units scanning similar deviceId over 100 queries with more than 250k items 
 
 ```
+-- Timers ----------------------------------------------------------------------
+scans
+             count = 29
+         mean rate = 0.48 calls/second
+     1-minute rate = 2.22 calls/second
+     5-minute rate = 4.25 calls/second
+    15-minute rate = 4.73 calls/second
+               min = 136.30 milliseconds
+               max = 35381.27 milliseconds
+              mean = 1549.69 milliseconds
+            stddev = 6537.37 milliseconds
+            median = 154.31 milliseconds
+              75% <= 158.55 milliseconds
+              95% <= 19436.11 milliseconds
+              98% <= 35381.27 milliseconds
+              99% <= 35381.27 milliseconds
+            99.9% <= 35381.27 milliseconds
 ```
 
 ## Links

@@ -91,6 +91,10 @@ public class DynamoRepository {
 
         Map<String, AttributeValue> item =  client.getItem(request).getItem();
 
+        if (item == null) {
+            return new Device();
+        }
+
         Device device = new Device();
         device.setDeviceId(item.get("deviceId").getS());
         device.setStatus(Device.Status.valueOf(item.get("status").getS()));

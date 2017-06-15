@@ -25,6 +25,10 @@ public class RandomTools {
         return sb.toString().toUpperCase();
     }
 
+    public static String partialMacAddress() {
+        return macAddress().substring(0, 5);
+    }
+
     public static Device.Status deviceStatus() {
         Random rand = new Random();
 
