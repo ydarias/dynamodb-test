@@ -1,40 +1,27 @@
-package com.yeray.test.dynamodbtest;
+package com.yeray.test.dynamodb.tasks;
 
 import com.codahale.metrics.Timer;
-import com.yeray.test.dynamodbtest.model.Device;
-import com.yeray.test.dynamodbtest.repository.DynamoRepository;
-import com.yeray.test.dynamodbtest.tools.MeteringTools;
-import com.yeray.test.dynamodbtest.tools.RandomTools;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import com.yeray.test.dynamodb.model.Device;
+import com.yeray.test.dynamodb.repository.DynamoRepository;
+import com.yeray.test.dynamodb.tools.MeteringTools;
+import com.yeray.test.dynamodb.tools.RandomTools;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
-@Component
-public class DevicesLoader implements InitializingBean {
+public class DevicesLoader {
 
-    @Value("${loader.inserts}")
-    private int inserts;
-
-    @Value("${loader.threads}")
-    private int threads;
-
-    @Autowired
     private DynamoRepository repository;
 
-    @Autowired
     private MeteringTools meteringTools;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        launchInserts();
+    public DevicesLoader(DynamoRepository repository, MeteringTools meteringTools) {
+        this.repository = repository;
+        this.meteringTools = meteringTools;
     }
 
-    private void launchInserts() {
+    public void launchInserts(int inserts, int threads) {
         try {
             new ForkJoinPool(threads).submit(() ->
                     IntStream.range(0, inserts)

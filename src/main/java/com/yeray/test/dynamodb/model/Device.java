@@ -1,4 +1,4 @@
-package com.yeray.test.dynamodbtest.model;
+package com.yeray.test.dynamodb.model;
 
 import com.google.gson.Gson;
 

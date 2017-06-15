@@ -1,13 +1,16 @@
-## DynamoDB tests
+# DynamoDB tests
 
 DynamoDB es una base de datos NoSQL desarrollada por Amazon y que se ofrece como servicio dentro de Amazon Web Services (AWS).
 
 ## Ventajas
 
-* No requiere mantenimiento porque se delega integramente en Amazon AWS.
-* Permite opciones de autoescalado.
+* "Amazon DynamoDB is a managed, NoSQL database service" ... es decir que todas las operaciones de mantenimiento se delegan a Amazon.
+* Permite la configuración con autoescalado (además del particionado automático), por lo que es compatible son sistemas que requieran de uan gran escalabilidad.
+* Se trata de un sistema con un "comportamiento lineal" y por tanto predecible.
 
 ## Limitaciones y contras
+
+* La comunicación es sobre HTTP, por lo que la latencia es peor que con RDS o Atlas.
 
 * No se trata de una base de datos relacional por lo que no existe la operación de __join__ entre tablas.
 * Actualmente existe una limitación de 256 tablas por cuenta por zona de disponibilidad. __No se trata de un límite bajo en la mayoría de los casos pero es algo a tener muy en cuenta__.
@@ -176,3 +179,34 @@ inserts
 Durante la ejecución se puede observar un comportamiento algo extraño del autoesacalado, eliminando unidades de escritura del provisionado. __Esto se puede deber a que la ejecución del test sintético se ha realizado con una sola máquina__, y dicha máquina se puede haber saturado mientras esperaba respuesta, lo que afecta a como Dynamo hace el escalado.
 
 ![Comportamiento del autoescalado durante la ejecución.](doc/images/10-1000-autoscaling-behaviour.png)
+
+### 5 read units getting by hash key over 100 queries with more than 250k items
+
+```
+-- Timers ----------------------------------------------------------------------
+query
+             count = 100
+         mean rate = 42.97 calls/second
+     1-minute rate = 0.00 calls/second
+     5-minute rate = 0.00 calls/second
+    15-minute rate = 0.00 calls/second
+               min = 42.52 milliseconds
+               max = 604.24 milliseconds
+              mean = 78.05 milliseconds
+            stddev = 108.00 milliseconds
+            median = 54.85 milliseconds
+              75% <= 67.40 milliseconds
+              95% <= 84.32 milliseconds
+              98% <= 603.60 milliseconds
+              99% <= 604.23 milliseconds
+            99.9% <= 604.24 milliseconds
+```
+
+### 5 read units scanning similar deviceId over 100 queries with more than 250k items 
+
+```
+```
+
+## Links
+
+* [Amazon DynamoDB: ten things you really should know](https://cloudacademy.com/blog/amazon-dynamodb-ten-things/)

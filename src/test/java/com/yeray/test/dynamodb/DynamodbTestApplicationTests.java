@@ -1,4 +1,4 @@
-package com.yeray.test.dynamodbtest;
+package com.yeray.test.dynamodb;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

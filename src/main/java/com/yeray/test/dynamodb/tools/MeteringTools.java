@@ -1,15 +1,13 @@
-package com.yeray.test.dynamodbtest.tools;
+package com.yeray.test.dynamodb.tools;
 
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Component
 public class MeteringTools {
 
     private final MetricRegistry metrics = new MetricRegistry();

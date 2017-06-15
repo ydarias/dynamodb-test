@@ -1,6 +1,6 @@
-package com.yeray.test.dynamodbtest.tools;
+package com.yeray.test.dynamodb.tools;
 
-import com.yeray.test.dynamodbtest.model.Device;
+import com.yeray.test.dynamodb.model.Device;
 
 import java.util.Random;
 

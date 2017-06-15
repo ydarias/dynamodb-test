@@ -1,33 +1,29 @@
-package com.yeray.test.dynamodbtest.repository;
+package com.yeray.test.dynamodb.repository;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.Select;
-import com.yeray.test.dynamodbtest.model.Device;
-import org.springframework.stereotype.Component;
+import com.yeray.test.dynamodb.model.Device;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
 public class DynamoRepository {
 
     private AmazonDynamoDB client;
 
     private Table table;
-
-    private DynamoDBMapper mapper;
 
     public DynamoRepository() {
         client = AmazonDynamoDBClientBuilder.standard()
@@ -37,7 +33,6 @@ public class DynamoRepository {
         DynamoDB dynamoDB  = new DynamoDB(client);
 
         table = dynamoDB.getTable("device-management");
-        mapper = new DynamoDBMapper(client);
     }
 
     public void storeDevice(Device device) {
@@ -84,6 +79,23 @@ public class DynamoRepository {
 
                     return device;
                 }).collect(Collectors.toList());
+    }
+
+    public Device getDevice(String deviceId) {
+        Map<String, AttributeValue> filterKey = new HashMap<>();
+        filterKey.put("deviceId", new AttributeValue().withS(deviceId));
+
+        GetItemRequest request = new GetItemRequest()
+                .withTableName("device-management")
+                .withKey(filterKey);
+
+        Map<String, AttributeValue> item =  client.getItem(request).getItem();
+
+        Device device = new Device();
+        device.setDeviceId(item.get("deviceId").getS());
+        device.setStatus(Device.Status.valueOf(item.get("status").getS()));
+
+        return device;
     }
 
 }

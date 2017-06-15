@@ -1,6 +1,0 @@
-server:
-  port: 4000
-
-loader:
-  threads: 500
-  inserts: 100000
