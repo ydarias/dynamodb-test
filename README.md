@@ -351,6 +351,9 @@ Caused by: com.amazonaws.services.dynamodbv2.model.ProvisionedThroughputExceeded
 
 ### Blogs
 
+* [Top DynamoDB performance metrics](https://www.datadoghq.com/blog/top-dynamodb-performance-metrics/)
+* [Amazon DynamoDB – Benchmarking with Production Data & Analysis](http://www.hackpundit.com/amazon-dynamodb-benchmark-analysis-performance/)
+* [One Year of DynamoDB at Timehop](https://medium.com/building-timehop/one-year-of-dynamodb-at-timehop-f761d9fe5fa1)
 * [Amazon DynamoDB: ten things you really should know](https://cloudacademy.com/blog/amazon-dynamodb-ten-things/)
 * [DynamoDB is awesom, but ...](http://simondlr.com/post/26360955465/dynamodb-is-awesome-but)
 * [Scaling a startup using DynamoDB](https://syslog.ravelin.com/scaling-a-startup-using-dynamodb-4d97b0843350)
