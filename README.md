@@ -2,7 +2,7 @@
 
 DynamoDB es una base de datos NoSQL desarrollada por Amazon y que se ofrece como servicio dentro de Amazon Web Services (AWS), lo cual puede hacer que su funcionamiento sea un misterio en muchos casos. Con este proyecto se pretende obtener un mayor conocimiento de la herramienta así como detectar en qué casos de usos es útil y en cuales podría ser mejor optar por otra solución.
 
-## Ventajas
+## Ventajas
 
 Las principales ventajas ofrecidas por DynamoDB se refieren a su capacidad de escalado y a la ausencia de tareas de administración.
 
@@ -23,7 +23,7 @@ La comunicación con DynamoDB se realiza mediante HTTP, dependiendo de las neces
 
 Se debe pensar a priori en la estructura y provisión de la tabla a crear, porque __la creación y eliminación de tablas no es instantánea__ y __el provisionamiento de "workers" tarda un tiempo en hacerse efectivo__.
 
-### Limites específicos
+### Límites específicos
 
 * Sólo se pueden crear 256 tablas por cuenta por zona de disponibilidad.
 * Exite un límite de 1MB como respuesta de una query o un scan, _pero se puede usar LastEvaluatedItem para seguir obteniendo resultados_.
@@ -40,7 +40,7 @@ Para tener una idea aproximada del comportamiento (en escritura y lectura) que t
 
 __Hay que tener en cuenta que estás medidas incluyen la latencia de la red y no sólo el tiempo de procesamiento de DynamoDB__.
 
-### Disclaimer
+### Disclaimer
 
 Estos tests se han realizado para tener una idea aproximada del comportamiento de DynamoDB, así como comprobar los posibles inconvenientes de su uso. __En ningún caso se debe tomar como un Benchmark válido__.
 
@@ -232,11 +232,11 @@ scans
             99.9% <= 35381.27 milliseconds
 ```
 
-### Final test
+### Final test
 
 Tras varios ajustes del sistema de prueba, la última prueba consiste en crear un data set común para las escrituras y las lecturas y realizar todas las pruebas de carga sobre una misma configuración de DynamoDB.
 
-#### Instancia de DynamoDB
+#### Instancia de DynamoDB
 
 | | Value |
 |-|-------|
@@ -345,12 +345,18 @@ Caused by: com.amazonaws.services.dynamodbv2.model.ProvisionedThroughputExceeded
 
 ## Links
 
+### Important information 
+
+* [Throughput Capacity for Reads and Writes](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ProvisionedThroughput.html)
+
+### Blogs
+
 * [Amazon DynamoDB: ten things you really should know](https://cloudacademy.com/blog/amazon-dynamodb-ten-things/)
 * [DynamoDB is awesom, but ...](http://simondlr.com/post/26360955465/dynamodb-is-awesome-but)
 * [Scaling a startup using DynamoDB](https://syslog.ravelin.com/scaling-a-startup-using-dynamodb-4d97b0843350)
 * [Using AWS DynamoDB - Pros and cons](https://bekitzur.com/blog/using-aws-dynamodb-pros-and-cons/)
 
-### Vídeos
+### Vídeos
 
 * [AWS re:Invent 2016: Toyota Racing Development Makes Racing Decisions in Real Time with AWS](https://www.youtube.com/watch?v=K6SHMFDMhYk)
 * [AWS re:Invent 2016: Streaming ETL for RDS and DynamoDB](https://youtu.be/8KKNMy-EYxA)
