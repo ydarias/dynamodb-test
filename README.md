@@ -312,3 +312,12 @@ scans
 ## Links
 
 * [Amazon DynamoDB: ten things you really should know](https://cloudacademy.com/blog/amazon-dynamodb-ten-things/)
+* [DynamoDB is awesom, but ...](http://simondlr.com/post/26360955465/dynamodb-is-awesome-but)
+* [Scaling a startup using DynamoDB](https://syslog.ravelin.com/scaling-a-startup-using-dynamodb-4d97b0843350)
+* [Using AWS DynamoDB - Pros and cons](https://bekitzur.com/blog/using-aws-dynamodb-pros-and-cons/)
+
+### Vídeos
+
+* [AWS re:Invent 2016: Toyota Racing Development Makes Racing Decisions in Real Time with AWS](https://www.youtube.com/watch?v=K6SHMFDMhYk)
+* [AWS re:Invent 2016: Streaming ETL for RDS and DynamoDB](https://youtu.be/8KKNMy-EYxA)
+* [AWS re:Invent 2016: You Can’t Protect What You Can’t See: Security & Compliance from Adobe](https://youtu.be/-C08o4vVH24)
