@@ -309,6 +309,40 @@ scans
 
 ![Read load](doc/images/read_load.png)
 
+```
+java.util.concurrent.ExecutionException: com.amazonaws.services.dynamodbv2.model.ProvisionedThroughputExceededException: The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API. (Service: AmazonDynamoDBv2; Status Code: 400; Error Code: ProvisionedThroughputExceededException; Request ID: P7JRFFNHG6TD55BSI9QE73CBQ3VV4KQNSO5AEMVJF66Q9ASUAAJG)
+	at java.util.concurrent.ForkJoinTask.get(ForkJoinTask.java:1006)
+	at com.yeray.test.dynamodb.tasks.DevicesScanner.launch(DevicesScanner.java:35)
+	at com.yeray.test.dynamodb.Launcher.main(Launcher.java:45)
+Caused by: com.amazonaws.services.dynamodbv2.model.ProvisionedThroughputExceededException: The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API. (Service: AmazonDynamoDBv2; Status Code: 400; Error Code: ProvisionedThroughputExceededException; Request ID: P7JRFFNHG6TD55BSI9QE73CBQ3VV4KQNSO5AEMVJF66Q9ASUAAJG)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.handleErrorResponse(AmazonHttpClient.java:1588)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeOneRequest(AmazonHttpClient.java:1258)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeHelper(AmazonHttpClient.java:1030)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.doExecute(AmazonHttpClient.java:742)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeWithTimer(AmazonHttpClient.java:716)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.execute(AmazonHttpClient.java:699)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.access$500(AmazonHttpClient.java:667)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutionBuilderImpl.execute(AmazonHttpClient.java:649)
+	at com.amazonaws.http.AmazonHttpClient.execute(AmazonHttpClient.java:513)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.doInvoke(AmazonDynamoDBClient.java:2089)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.invoke(AmazonDynamoDBClient.java:2065)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.executeScan(AmazonDynamoDBClient.java:1581)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.scan(AmazonDynamoDBClient.java:1557)
+	at com.yeray.test.dynamodb.repository.DynamoRepository.getDevicesStartingWith(DynamoRepository.java:74)
+	at com.yeray.test.dynamodb.tasks.DevicesScanner.scanRandomDevice(DevicesScanner.java:46)
+	at com.yeray.test.dynamodb.tasks.DevicesScanner.lambda$null$0(DevicesScanner.java:33)
+	at java.util.stream.ForEachOps$ForEachOp$OfInt.accept(ForEachOps.java:205)
+	at java.util.stream.Streams$RangeIntSpliterator.forEachRemaining(Streams.java:110)
+	at java.util.Spliterator$OfInt.forEachRemaining(Spliterator.java:693)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:291)
+	at java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:731)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+```
+
 ## Links
 
 * [Amazon DynamoDB: ten things you really should know](https://cloudacademy.com/blog/amazon-dynamodb-ten-things/)
