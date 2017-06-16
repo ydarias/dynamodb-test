@@ -6,8 +6,9 @@ import java.util.Random;
 
 public class RandomTools {
 
+    private static Random rand = new Random();
+
     public static String macAddress() {
-        Random rand = new Random();
         byte[] macAddr = new byte[6];
         rand.nextBytes(macAddr);
 
@@ -25,14 +26,16 @@ public class RandomTools {
         return sb.toString().toUpperCase();
     }
 
-    public static String partialMacAddress() {
-        return macAddress().substring(0, 5);
+    public static Device.Status deviceStatus() {
+        return (rand.nextInt() % 2 == 0) ? Device.Status.OFFLINE : Device.Status.ONLINE;
     }
 
-    public static Device.Status deviceStatus() {
-        Random rand = new Random();
+    public static Device.Type deviceType() {
+        return (rand.nextInt() % 2 == 0) ? Device.Type.ACCESS_POINT : Device.Type.STATION;
+    }
 
-        return (rand.nextInt() % 2 == 0) ? Device.Status.OFFLINE :  Device.Status.ONLINE;
+    public static Device.Manufacturer deviceManufacturer() {
+        return (rand.nextInt() % 2 == 0) ? Device.Manufacturer.MEDIATEK : Device.Manufacturer.QUALCOMM;
     }
 
 }

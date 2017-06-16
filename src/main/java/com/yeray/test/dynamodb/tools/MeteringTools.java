@@ -22,7 +22,7 @@ public class MeteringTools {
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
 
-        reporter.start(60, TimeUnit.SECONDS);
+        reporter.start(1, TimeUnit.HOURS);
     }
 
     public Timer createTimer(String name) {

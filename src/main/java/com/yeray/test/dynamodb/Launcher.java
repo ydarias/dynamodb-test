@@ -1,14 +1,16 @@
 package com.yeray.test.dynamodb;
 
+import com.yeray.test.dynamodb.model.Device;
+import com.yeray.test.dynamodb.model.DeviceBuilder;
 import com.yeray.test.dynamodb.repository.DynamoRepository;
 import com.yeray.test.dynamodb.tasks.DevicesLoader;
 import com.yeray.test.dynamodb.tasks.DevicesQuerier;
 import com.yeray.test.dynamodb.tasks.DevicesScanner;
-import com.yeray.test.dynamodb.tasks.Task;
 import com.yeray.test.dynamodb.tools.MeteringTools;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Launcher {
 
@@ -16,31 +18,32 @@ public class Launcher {
 
     private static MeteringTools meteringTools = new MeteringTools();
 
-    private static final Map<String, Task> tasks = new HashMap<>();
-
-    static {
-        tasks.put("insert", new DevicesLoader(repository, meteringTools));
-        tasks.put("scan", new DevicesScanner(repository, meteringTools));
-        tasks.put("query", new DevicesQuerier(repository, meteringTools));
-    }
-
     public static void main(String ... args) {
-        String operation;
-        int operationsNumber;
+        int writeOperations;
+        int readOperations;
         int threads;
 
         try {
-            operation = args[0];
-            operationsNumber = Integer.parseInt(args[1]);
+            writeOperations = Integer.parseInt(args[0]);
+            readOperations = Integer.parseInt(args[1]);
             threads = Integer.parseInt(args[2]);
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             System.out.println("Error invoking the program");
-            System.out.println("$ launcher <operation> <number of operations> <threads>");
+            System.out.println("$ launcher <number of writes> <number of reads> <threads>");
 
             return;
         }
 
-        tasks.get(operation).launch(operationsNumber, threads);
+        System.out.println("Preparing data set ...");
+
+        List<Device> devices = IntStream.range(0, writeOperations)
+                .parallel()
+                .mapToObj(i -> DeviceBuilder.randomDevice())
+                .collect(Collectors.toList());
+
+        new DevicesLoader(repository, meteringTools).launch(devices, threads);
+        new DevicesScanner(repository, meteringTools).launch(devices, readOperations, threads);
+        new DevicesQuerier(repository, meteringTools).launch(devices, readOperations, threads);
     }
 
 }

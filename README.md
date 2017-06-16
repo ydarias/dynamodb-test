@@ -1,23 +1,31 @@
-# DynamoDB tests
+# Estudio sobre DynamoDB
 
-DynamoDB es una base de datos NoSQL desarrollada por Amazon y que se ofrece como servicio dentro de Amazon Web Services (AWS).
+DynamoDB es una base de datos NoSQL desarrollada por Amazon y que se ofrece como servicio dentro de Amazon Web Services (AWS), lo cual puede hacer que su funcionamiento sea un misterio en muchos casos. Con este proyecto se pretende obtener un mayor conocimiento de la herramienta así como detectar en qué casos de usos es útil y en cuales podría ser mejor optar por otra solución.
 
 ## Ventajas
 
-* "Amazon DynamoDB is a managed, NoSQL database service" ... es decir que todas las operaciones de mantenimiento se delegan a Amazon.
-* Permite la configuración con autoescalado (además del particionado automático), por lo que es compatible son sistemas que requieran de uan gran escalabilidad.
-* Se trata de un sistema con un "comportamiento lineal" y por tanto predecible.
+Las principales ventajas ofrecidas por DynamoDB se refieren a su capacidad de escalado y a la ausencia de tareas de administración.
 
-## Limitaciones y contras
+Por un lado se trata de un sistema __con un comportamiento constante y predecible__, ya que es capaz de realizar el particionado automáticamente. Y además es __un sistema muy escalable__ que se puede ajustar a todas las necesidades y cuya provisión de carga se puede ir ajustando dinámicamente, ya sea de forma manual o con la configuración de __autoescalado__.
 
-* La comunicación es sobre HTTP, por lo que la latencia es peor que con RDS o Atlas.
+Por otro lado __no requiere ninguna tarea de administración__, estas tareas son realizadas por Amazon que se encarga entre otras cosas de realizar los ajustes de optimización, replicación en diferentes zonas de disponibilidad o sustitución de hardware defectuoso entre otros.
 
-* No se trata de una base de datos relacional por lo que no existe la operación de __join__ entre tablas.
-* Actualmente existe una limitación de 256 tablas por cuenta por zona de disponibilidad. __No se trata de un límite bajo en la mayoría de los casos pero es algo a tener muy en cuenta__.
-* La creación y eliminación de tablas no es una operación instantánea y hay que tenerlo en cuenta cuando se hace programáticamente.
-* Al no ser una base de datos relacional tenemos que tener en cuenta que no respeta las propiedades ACID.
-* El provisionamiento de workers no es instantáneo, cosa que hay que tener en cuenta si no se dispone de un sistema configurado con autoescalado.
-* Las queries tienen limitaciones y hay que tenerlas en cuenta a la hora de diseñar las tablas.
+## Desventajas
+
+Como cualquier otro sistema posee una serie de desventajas, que en algunas situaciones podría hacer que no sea la solución más adecuada para el problema a resolver.
+
+No se trata de una base de datos relacional,  por lo tanto:
+
+* __No es un sistema ACID__, si por ejemplo se necesitasen transacciones no se podría delegar en DynamoDB.
+* __No se pueden hacer joins entre tablas__, también este tipo de operaciones se deben realizar de forma externa a DynamoDB.
+
+La comunicación con DynamoDB se realiza mediante HTTP, dependiendo de las necesidades esto también puede ser un problema, debido a que __aumenta ligeramente la latencia__ respecto a otras opciones como Amazon RDS o MongoDB Atlas.
+
+Se debe pensar a priori en la estructura y provisión de la tabla a crear, porque __la creación y eliminación de tablas no es instantánea__ y __el provisionamiento de "workers" tarda un tiempo en hacerse efectivo__.
+
+### Limites específicos
+
+* Sólo se pueden crear 256 tablas por cuenta por zona de disponibilidad.
 * Exite un límite de 1MB como respuesta de una query o un scan, _pero se puede usar LastEvaluatedItem para seguir obteniendo resultados_.
 * Las operaciones en batch tienen varias limitaciones.
   * Un tamaño máximo de 16MB.
@@ -202,7 +210,7 @@ query
             99.9% <= 604.24 milliseconds
 ```
 
-### 5 read units scanning similar deviceId over 100 queries with more than 250k items 
+### 5 read units scanning similar deviceId over 100 queries with more than 250k items
 
 ```
 -- Timers ----------------------------------------------------------------------
@@ -223,6 +231,83 @@ scans
               99% <= 35381.27 milliseconds
             99.9% <= 35381.27 milliseconds
 ```
+
+### Final test
+
+Tras varios ajustes del sistema de prueba, la última prueba consiste en crear un data set común para las escrituras y las lecturas y realizar todas las pruebas de carga sobre una misma configuración de DynamoDB.
+
+#### Instancia de DynamoDB
+
+| | Value |
+|-|-------|
+| Write capacity | 500 |
+| Read capacity | 500 |
+
+#### Máquina de pruebas
+
+| | Value |
+|-|-------|
+| Insert operations | 250.000 |
+| Read operations | 30.000 |
+| Threads | 100 |
+
+#### Resultados
+
+```
+-- Timers ----------------------------------------------------------------------
+inserts
+             count = 250000
+         mean rate = 74.66 calls/second
+     1-minute rate = 0.00 calls/second
+     5-minute rate = 0.05 calls/second
+    15-minute rate = 17.73 calls/second
+               min = 41.77 milliseconds
+               max = 151.55 milliseconds
+              mean = 43.44 milliseconds
+            stddev = 4.53 milliseconds
+            median = 42.80 milliseconds
+              75% <= 43.18 milliseconds
+              95% <= 45.64 milliseconds
+              98% <= 50.22 milliseconds
+              99% <= 60.38 milliseconds
+            99.9% <= 149.50 milliseconds
+queries
+             count = 30000
+         mean rate = 186.12 calls/second
+     1-minute rate = 263.45 calls/second
+     5-minute rate = 111.28 calls/second
+    15-minute rate = 67.46 calls/second
+               min = 40.11 milliseconds
+               max = 5308.06 milliseconds
+              mean = 54.59 milliseconds
+            stddev = 193.08 milliseconds
+            median = 41.25 milliseconds
+              75% <= 41.95 milliseconds
+              95% <= 46.81 milliseconds
+              98% <= 54.96 milliseconds
+              99% <= 271.62 milliseconds
+            99.9% <= 5225.05 milliseconds
+scans
+             count = 21362
+         mean rate = 8.02 calls/second
+     1-minute rate = 2.35 calls/second
+     5-minute rate = 5.87 calls/second
+    15-minute rate = 9.28 calls/second
+               min = 128.40 milliseconds
+               max = 38094.44 milliseconds
+              mean = 840.54 milliseconds
+            stddev = 2112.71 milliseconds
+            median = 300.73 milliseconds
+              75% <= 676.55 milliseconds
+              95% <= 2883.20 milliseconds
+              98% <= 5935.41 milliseconds
+              99% <= 10695.08 milliseconds
+            99.9% <= 37757.83 milliseconds
+```
+
+![Write load ](doc/images/write_load.png)
+
+![Read load](doc/images/read_load.png)
 
 ## Links
 

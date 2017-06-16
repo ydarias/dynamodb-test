@@ -8,6 +8,10 @@ public class Device {
 
     private Status status;
 
+    private Type type;
+
+    private Manufacturer manufacturer;
+
     public String asJson() {
         Gson gson = new Gson();
 
@@ -22,6 +26,14 @@ public class Device {
 
     public enum Status {
         ONLINE, OFFLINE
+    }
+
+    public enum Type {
+        STATION, ACCESS_POINT
+    }
+
+    public enum Manufacturer {
+        MEDIATEK, QUALCOMM
     }
 
     public String getDeviceId() {
@@ -40,11 +52,19 @@ public class Device {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Device{" +
-                "deviceId='" + deviceId + '\'' +
-                ", status=" + status +
-                '}';
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public Manufacturer getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.manufacturer = manufacturer;
     }
 }

@@ -1,17 +1,16 @@
 package com.yeray.test.dynamodb.tasks;
 
 import com.codahale.metrics.Timer;
+import com.yeray.test.dynamodb.model.Device;
 import com.yeray.test.dynamodb.repository.DynamoRepository;
 import com.yeray.test.dynamodb.tools.MeteringTools;
-import com.yeray.test.dynamodb.tools.RandomTools;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
-public class DevicesScanner implements Task {
+public class DevicesScanner  {
 
     private DynamoRepository repository;
 
@@ -22,31 +21,23 @@ public class DevicesScanner implements Task {
         this.meteringTools = meteringTools;
     }
 
-    public void launch(int scans, int threads) {
-        List<String> macs = prepareRandomScans(scans);
-
-        System.out.println("Executing task ...");
+    public void launch(List<Device> devices, int scans, int threads) {
+        System.out.println("Executing scans ...");
 
         try {
             new ForkJoinPool(threads).submit(() ->
-                    macs.parallelStream()
-                            .forEach(this::scanRandomDevice)
+                    IntStream.range(0, scans)
+                        .parallel()
+                        .forEach(i -> {
+                            String mac = devices.get(i).getDeviceId().substring(0, 5);
+                            scanRandomDevice(mac);
+                        })
             ).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
         meteringTools.report();
-    }
-
-    private List<String> prepareRandomScans(int scans) {
-        System.out.println("Preparing data set ...");
-
-        List<String> macs = new ArrayList<>();
-        IntStream.range(0, scans)
-                .forEach(i -> macs.add(i, RandomTools.partialMacAddress()));
-
-        return macs;
     }
 
     private void scanRandomDevice(String mac) {

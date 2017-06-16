@@ -4,15 +4,12 @@ import com.codahale.metrics.Timer;
 import com.yeray.test.dynamodb.model.Device;
 import com.yeray.test.dynamodb.repository.DynamoRepository;
 import com.yeray.test.dynamodb.tools.MeteringTools;
-import com.yeray.test.dynamodb.tools.RandomTools;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
-import java.util.stream.IntStream;
 
-public class DevicesLoader implements Task {
+public class DevicesLoader {
 
     private DynamoRepository repository;
 
@@ -23,10 +20,8 @@ public class DevicesLoader implements Task {
         this.meteringTools = meteringTools;
     }
 
-    public void launch(int inserts, int threads) {
-        List<Device> devices = prepareRandomDevicesLoad(inserts);
-
-        System.out.println("Executing task ...");
+    public void launch(List<Device> devices, int threads) {
+        System.out.println("Executing inserts ...");
 
         try {
             new ForkJoinPool(threads).submit(() ->
@@ -38,24 +33,6 @@ public class DevicesLoader implements Task {
         }
 
         meteringTools.report();
-    }
-
-    private List<Device> prepareRandomDevicesLoad(int inserts) {
-        System.out.println("Preparing data set ...");
-
-        List<Device> devices = new ArrayList<>();
-
-        IntStream.range(0, inserts).forEach(i -> devices.add(i, createRandomDevice()));
-
-        return devices;
-    }
-
-    private Device createRandomDevice() {
-        Device device = new Device();
-        device.setDeviceId(RandomTools.macAddress());
-        device.setStatus(RandomTools.deviceStatus());
-
-        return device;
     }
 
     private void insertRandomDevice(Device device) {
